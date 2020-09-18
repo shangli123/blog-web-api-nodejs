@@ -1,9 +1,9 @@
-const { getList, getDetail, newBlog } = require('../controller/blog')
+const { getList, getDetail, newBlog, updateBlog, deleteBlog } = require('../controller/blog')
 const { SuccessModel, FailModel} = require('../model/resModel')
 
 const handleBlogRouter = (req, res) => {
     const method = req.method
-
+    const id = req.query.id
 
     if (method == 'GET' && req.path =='/api/blog/list') {
         const author = req.query.author || ''
@@ -14,7 +14,7 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method == 'GET' && req.path == '/api/blog/detail') {
-        const id = req.query.id
+
         const data = getDetail(id)
         return new SuccessModel(data)
     }
@@ -25,14 +25,22 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method == 'POST' && req.path == '/api/blog/update') {
-        return{
-            msg: 'This is the interface to update a blog'
+        const result = updateBlog(id, req.body)
+        if (result) {
+            return new SuccessModel()
+        }
+        else {
+            return new FailModel('Blog update operation failed!')
         }
     }
 
     if (method == 'POST' && req.path == '/api/blog/delete') {
-        return{
-            msg: 'This is the interface to delete a blog'
+        const result = deleteBlog(id)
+        if (result) {
+            return new SuccessModel()
+        }
+        else {
+            return new FailModel('Failed to delete this blog!')
         }
     }
 }

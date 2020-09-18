@@ -37,14 +37,24 @@ const getDetail = (id) => {
 }
 
 const newBlog = (blogData = {}) => {
-    console.log('newBlog blogData', blogData)
     return {
         id: 4
     }
 }
 
+const updateBlog = (id, blogData = {}) => {
+    console.log('Updated blog, ', id, blogData)
+    return true
+}
+
+const deleteBlog = (id) => {
+    return true
+}
+
 module.exports = {
     getList,
     getDetail,
-    newBlog
+    newBlog,
+    updateBlog,
+    deleteBlog
 }
