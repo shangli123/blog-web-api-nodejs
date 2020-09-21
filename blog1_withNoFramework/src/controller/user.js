@@ -4,5 +4,5 @@ const loginCheck = (username, password) => {
     }
     return false
 }
-// hahaha
+// hahahaha
 module.exports = { loginCheck }
