@@ -37,6 +37,16 @@ const serverHandle = (req, res) => {
     req.query = querystring.parse(url.split('?')[1])
 
     getPostData(req).then(postData => {
+        const blogResult = handleBlogRouter(req, res)
+        if (blogResult) {
+            blogResult.then(blogData =>{
+                res.end(
+                    JSON.stringify(blogData)
+                )
+            })
+            return
+        }
+
         req.body = postData
         const blogData = handleBlogRouter(req, res)
         if (blogData) {
