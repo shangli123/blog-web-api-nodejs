@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "bin/www.js",
-
   "dependencies": {
     "cross-env": "^7.0.2",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.4"
   },
   "devDependencies": {
