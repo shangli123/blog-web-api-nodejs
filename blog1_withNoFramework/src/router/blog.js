@@ -16,13 +16,18 @@ const handleBlogRouter = (req, res) => {
 
     if (method == 'GET' && req.path == '/api/blog/detail') {
 
-        const data = getDetail(id)
-        return new SuccessModel(data)
+        const result = getDetail(id) 
+        return result.then(data => {
+            return new SuccessModel(data)
+        })
     }
 
     if (method == 'POST' && req.path == '/api/blog/new') {
-        const data = newBlog(req.body)
-        return new SuccessModel(data)
+        req.body.author = 'zhang3'      
+        const result = newBlog(req.body)
+        return result.then(data =>{
+            return new SuccessModel(data)
+        })
     }
 
     if (method == 'POST' && req.path == '/api/blog/update') {

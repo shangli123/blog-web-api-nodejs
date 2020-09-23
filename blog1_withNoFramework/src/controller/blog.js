@@ -14,21 +14,27 @@ const getList = (author, keyword) => {
 }
 
 const getDetail = (id) => {
-    return [
-        {
-            id: 1,
-            title: 'Title 1',
-            content: 'Content 1',
-            createTime: 1600380222998,
-            author: 'Shang'
-        }
-    ]
+    const sql = `SELECT * FROM blogs WHERE id='${id}'`
+    return exec(sql).then(rows => {
+        return rows[0]
+    })
 }
 
 const newBlog = (blogData = {}) => {
-    return {
-        id: 4
-    }
+    const title = blogData.title
+    const content = blogData.content
+    const author = blogData.author
+    const sql_getID = `SELECT id FROM users WHERE username = '${author}';`
+    return exec(sql_getID).then(rows => {
+        const authorID = rows[0].id
+        const sql = `INSERT INTO blogs (title, content, authorID) VALUES ('${title}', '${content}', '${authorID}');`
+        return exec(sql).then(insertData => {
+            console.log('insertData is ', insertData)
+            return {
+                id: insertData.insertId
+            }
+        })
+    })
 }
 
 const updateBlog = (id, blogData = {}) => {
