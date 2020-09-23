@@ -29,7 +29,7 @@ const newBlog = (blogData = {}) => {
         const authorID = rows[0].id
         const sql = `INSERT INTO blogs (title, content, authorID) VALUES ('${title}', '${content}', '${authorID}');`
         return exec(sql).then(insertData => {
-            console.log('insertData is ', insertData)
+            //console.log('insertData is ', insertData)
             return {
                 id: insertData.insertId
             }
