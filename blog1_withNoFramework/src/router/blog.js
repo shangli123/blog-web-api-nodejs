@@ -32,12 +32,14 @@ const handleBlogRouter = (req, res) => {
 
     if (method == 'POST' && req.path == '/api/blog/update') {
         const result = updateBlog(id, req.body)
-        if (result) {
-            return new SuccessModel()
-        }
-        else {
-            return new FailModel('Blog update operation failed!')
-        }
+        return result.then(val => {
+            if (val) {
+                return new SuccessModel()
+            }
+            else {
+                return new FailModel('Blog update operation failed!')
+            }
+        })
     }
 
     if (method == 'POST' && req.path == '/api/blog/delete') {
