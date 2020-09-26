@@ -23,7 +23,7 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method == 'POST' && req.path == '/api/blog/new') {
-        req.body.author = 'zhang3'      
+        req.body.author = 'zhang3'         //fake
         const result = newBlog(req.body)
         return result.then(data =>{
             return new SuccessModel(data)
@@ -43,13 +43,16 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method == 'POST' && req.path == '/api/blog/delete') {
-        const result = deleteBlog(id)
-        if (result) {
-            return new SuccessModel()
-        }
-        else {
-            return new FailModel('Failed to delete this blog!')
-        }
+        const author = 'zhang3'  //fake
+        const result = deleteBlog(id, author)
+        return result.then(val => {
+            if (val) {
+                return new SuccessModel()
+            }
+            else {
+                return new FailModel('Blog deletion failed!')
+            }
+        })
     }
 }
 

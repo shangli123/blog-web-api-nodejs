@@ -53,8 +53,18 @@ const updateBlog = (id, blogData = {}) => {
     })
 }
 
-const deleteBlog = (id) => {
-    return true
+const deleteBlog = (id, author) => {
+    const sql_getID = `SELECT id FROM users WHERE username = '${author}';`
+    return exec(sql_getID).then(rows => {
+        const authorID = rows[0].id
+        const sql = `DELETE FROM blogs where id = '${id}' AND authorID = '${authorID}';`
+        return exec(sql).then(deleteData => {
+            if (deleteData.affectedRows) {
+                return true
+            }
+            return false
+        })
+    })
 }
 
 module.exports = {
