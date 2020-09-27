@@ -7,10 +7,8 @@ const handleUserRouter = (req, res) => {
     const method = req.method
 
     // Login Process
-    //if (method == 'POST' && req.path =='/api/user/login') {
-    if (method == 'GET' && req.path =='/api/user/login') {
-        //const {username, password} = req.body
-        const {username, password} = req.query
+    if (method == 'POST' && req.path =='/api/user/login') {
+        const {username, password} = req.body
         const result = login(username, password)
         return result.then(data => {
             if (data) {
@@ -25,17 +23,6 @@ const handleUserRouter = (req, res) => {
             }
         })
     }
-
-    // Test for login check
-    if(method == 'GET' && req.path == '/api/user/login-test') {
-        if (req.session.username) {
-            return Promise.resolve(new SuccessModel(`${JSON.stringify(req.session)} has already login.` ))
-        }
-        else {
-            return Promise.resolve(new FailModel("No login info detected!"))
-        }
-    }
-
 }
 
 module.exports = handleUserRouter

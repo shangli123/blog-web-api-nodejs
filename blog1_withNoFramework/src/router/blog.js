@@ -1,6 +1,13 @@
 const { getList, getDetail, newBlog, updateBlog, deleteBlog } = require('../controller/blog')
 const { SuccessModel, FailModel} = require('../model/resModel')
 
+//Login status check function:
+var loginCheck = (req) => {
+    if (!req.session.username) {
+        return Promise.resolve(new FailModel("No login info detected!"))
+    }
+}
+
 const handleBlogRouter = (req, res) => {
     const method = req.method
     const id = req.query.id
@@ -23,7 +30,12 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method == 'POST' && req.path == '/api/blog/new') {
-        req.body.author = 'zhang3'         //fake
+
+        var loginCheckResult = loginCheck(req)
+        if (loginCheckResult){
+            return loginCheck
+        }
+        req.body.author = req.session.username
         const result = newBlog(req.body)
         return result.then(data =>{
             return new SuccessModel(data)
@@ -31,6 +43,10 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method == 'POST' && req.path == '/api/blog/update') {
+        var loginCheckResult = loginCheck(req)
+        if (loginCheckResult){
+            return loginCheck
+        }
         const result = updateBlog(id, req.body)
         return result.then(val => {
             if (val) {
@@ -43,7 +59,11 @@ const handleBlogRouter = (req, res) => {
     }
 
     if (method == 'POST' && req.path == '/api/blog/delete') {
-        const author = 'zhang3'  //fake
+        var loginCheckResult = loginCheck(req)
+        if (loginCheckResult){
+            return loginCheck
+        }
+        const author = req.session.username
         const result = deleteBlog(id, author)
         return result.then(val => {
             if (val) {
