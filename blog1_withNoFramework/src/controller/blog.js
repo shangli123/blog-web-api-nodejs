@@ -14,7 +14,7 @@ const getList = (author, keyword) => {
 }
 
 const getDetail = (id) => {
-    const sql = `SELECT * FROM blogs WHERE id='${id}'`
+    const sql = `SELECT content, createtime, username, authorID, blogs.id, title FROM blogs JOIN users ON blogs.authorID = users.id WHERE blogs.id='${id}'`
     return exec(sql).then(rows => {
         return rows[0]
     })
