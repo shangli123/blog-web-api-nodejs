@@ -36,6 +36,20 @@ const serverHandle = (req, res) => {
 
     req.query = querystring.parse(url.split('?')[1])
 
+    // Cookie
+    req.cookie = {}
+    const cookieStr = req.headers.cookie || ''
+    cookieStr.split(';').forEach(element => {
+        if (!element) {
+            return
+        }
+        const arr = element.split('=')
+        const key = arr[0]
+        const val = arr[1]
+        req.cookie[key] = val
+    })
+    console.log('req.cookie is ', req.cookie)
+
     getPostData(req).then(postData => {
         req.body = postData
         const blogResult = handleBlogRouter(req, res)
