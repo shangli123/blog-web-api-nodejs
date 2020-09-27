@@ -2,6 +2,14 @@ const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
+var SESSION_DATA = {}
+
+var getCookieExpires = () => {
+    var d = new Date()
+    d.setTime(d.getTime() + (24*3600*1000))
+    return d.toGMTString()
+}
+
 const getPostData = (req) => {
     const promise = new Promise((resolve, reject) => {
         if (req.method !== 'POST'){
@@ -48,13 +56,30 @@ const serverHandle = (req, res) => {
         const val = arr[1].trim()
         req.cookie[key] = val
     })
-    console.log('req.cookie is ', req.cookie)
+    
+    // Resolve Session
+    var needSetCookie = false
+    var userId = req.cookie.userId
+    if (userId) {
+        if (!SESSION_DATA[userId]) {
+            SESSION_DATA[userId] = {}
+        }
+    }
+    else {
+        needSetCookie = true
+        userId = `${Date.now()}_${Math.random()}`
+        SESSION_DATA[userId] = {}
+    }
+    req.session = SESSION_DATA[userId] 
 
     getPostData(req).then(postData => {
         req.body = postData
         const blogResult = handleBlogRouter(req, res)
         if (blogResult) {
             blogResult.then(blogData =>{
+                if (needSetCookie) {
+                    res.setHeader('Set-Cookie', `userId=${userId}; path=/; httpOnly; expires=${getCookieExpires()}` )
+                }
                 res.end(
                     JSON.stringify(blogData)
                 )
@@ -66,6 +91,9 @@ const serverHandle = (req, res) => {
         const userResult = handleUserRouter(req, res)
         if (userResult) {
             userResult.then(userData => {
+                if (needSetCookie) {
+                    res.setHeader('Set-Cookie', `userId=${userId}; path=/; httpOnly; expires=${getCookieExpires()}` )
+                }
                 res.end(
                     JSON.stringify(userData)
                 )
