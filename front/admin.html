@@ -93,7 +93,7 @@
 
         // 加载数据
         get(url).then(res => {
-            if (res.error !== 0) {
+            if (res.errno !== 0) {
                 alert('数据错误')
                 return
             }
@@ -133,7 +133,7 @@
             if (confirm('确定删除？')) {
                 const url = '/api/blog/del?id=' + $target.attr('data-id')
                 post(url).then(res => {
-                    if (res.error !== 0) {
+                    if (res.errno !== 0) {
                         alert('操作错误')
                         return
                     }

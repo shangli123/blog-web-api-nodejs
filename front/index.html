@@ -81,8 +81,8 @@
         // 加载数据
         get(url).then((res) => {
             console.log("res:", res);
-            if (res == undefined) {
-                alert('There is no blogs on this site!')
+            if (res.errno !== 0) {
+                alert('Something went wrong!')
                 return
             }
 

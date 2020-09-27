@@ -43,7 +43,7 @@
             }
             post(url, data).then(res => {
                 console.log("res", res)
-                if (res.error === 0) {
+                if (res.errno === 0) {
                     // 登录成功
                     location.href = '/admin.html'
                 } else {

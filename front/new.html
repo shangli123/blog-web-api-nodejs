@@ -77,7 +77,7 @@
                 content
             }
             post(url, data).then(res => {
-                if (res.error !== 0) {
+                if (res.errno !== 0) {
                     alert('操作错误')
                     return
                 }
