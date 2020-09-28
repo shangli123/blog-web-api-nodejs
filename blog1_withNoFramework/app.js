@@ -1,6 +1,7 @@
 const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
+const {access, error, event} = require('./src/utils/log')
 
 var SESSION_DATA = {}
 
@@ -37,6 +38,9 @@ const getPostData = (req) => {
 
 
 const serverHandle = (req, res) => {
+    // Record access logs
+    access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`)
+
     res.setHeader('content-type', 'application/json')
 
     const url = req.url
