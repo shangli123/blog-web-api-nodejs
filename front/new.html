@@ -64,8 +64,8 @@
 
         // Submit data
         $btnCreate.click(() => {
-            const title = $textTitle.val().trim()
-            const content = $textContent.val().trim()
+            const title = $textTitle.val().trim().replace('\'', '\\\'')
+            const content = $textContent.val().trim().replace('\'', '\\\'')
             if (title === '' || content === '') {
                 alert('Neither title nor content can be empty!')
                 return

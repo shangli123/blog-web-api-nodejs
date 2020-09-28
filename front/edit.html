@@ -101,8 +101,9 @@
         $btnUpdate.click(function () {
             const $this = $(this)
             const id = $this.attr('data-id')
-            const title = $textTitle.val()
-            const content = $textContent.val()
+            const title = $textTitle.val().replace('\'', '\\\'')
+            const content = $textContent.val().replace('\'', '\\\'')
+            console.log(content)
 
             const url = '/api/blog/update?id=' + id
             const data = {
