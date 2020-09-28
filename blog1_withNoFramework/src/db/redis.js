@@ -1,5 +1,5 @@
 var redis = require('redis')
-var {REDIS_CONF} = require('../conf/db')
+var {REDIS_CONF} = require('../config/db')
 
 var redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
 redisClient.on('error', err => {
@@ -8,7 +8,7 @@ redisClient.on('error', err => {
 
 function set(key, value){
     if (typeof value === 'object') {
-        value = JSON.stringify(val)
+        value = JSON.stringify(value)
     }
     redisClient.set(key, value, redis.print)
 }

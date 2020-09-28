@@ -1,5 +1,6 @@
 const { login } = require('../controller/user')
 const { SuccessModel, FailModel} = require('../model/resModel')
+const { set } = require('../db/redis')
 
 
 
@@ -15,7 +16,9 @@ const handleUserRouter = (req, res) => {
                 // Write cookie to browser
                 req.session.username = data.username
                 req.session.realname = data.realname
-                console.log('req.session is', req.session)
+                //console.log('req.session is', req.session)
+                // Sync to Redis
+                set(req.sessionId, req.session)
                 return new SuccessModel()
             }
             else {

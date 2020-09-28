@@ -1,9 +1,9 @@
 const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
+const { get, set } = require('./src/db/redis')
 const {access, error, event} = require('./src/utils/log')
 
-var SESSION_DATA = {}
 
 var getCookieExpires = () => {
     var d = new Date()
@@ -61,22 +61,33 @@ const serverHandle = (req, res) => {
         req.cookie[key] = val
     })
     
-    // Resolve Session
-    var needSetCookie = false
-    var userId = req.cookie.userId
-    if (userId) {
-        if (!SESSION_DATA[userId]) {
-            SESSION_DATA[userId] = {}
+    // Resolve Session via Redis
+	let needSetCookie = false
+	let userId = req.cookie.userId
+	if (!userId) {
+		needSetCookie = true
+		userId = `${Date.now()}_${Math.random()}`
+		// Initialize session in Redis
+		set(userId, {})
+	}
+	// Get session
+	req.sessionId = userId
+	get(req.sessionId).then(sessionData => {
+		if (sessionData == null) {
+			// Initialize session in Redis
+			set(req.sessionId, {})
+			// Setup session
+			req.session = {}
+		} else {
+			// Setup session
+			req.session = sessionData
         }
-    }
-    else {
-        needSetCookie = true
-        userId = `${Date.now()}_${Math.random()}`
-        SESSION_DATA[userId] = {}
-    }
-    req.session = SESSION_DATA[userId] 
+        return getPostData(req)
+    })
 
-    getPostData(req).then(postData => {
+    // Deal with POST data
+    .then(postData => {
+
         req.body = postData
         const blogResult = handleBlogRouter(req, res)
         if (blogResult) {
@@ -109,9 +120,6 @@ const serverHandle = (req, res) => {
         res.write("404 Not Found \n")
         res.end()
     })
-
-    
-
 }
 
 module.exports = serverHandle
