@@ -131,7 +131,8 @@
             }
 
             if (confirm('确定删除？')) {
-                const url = '/api/blog/del?id=' + $target.attr('data-id')
+                const url = '/api/blog/delete?id=' + $target.attr('data-id')
+                console.log('123')
                 post(url).then(res => {
                     if (res.errno !== 0) {
                         alert('操作错误')
