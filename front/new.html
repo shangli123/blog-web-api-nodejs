@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>创建博客</title>
+    <title>New Blog</title>
     <style type="text/css">
         body {
             margin: 0 20px;
@@ -32,7 +32,7 @@
 </head>
 
 <body>
-    <h1 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">创建博客</h1>
+    <h1 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">Write a New Blog</h1>
     <div>
         <div class="title-wrapper">
             <input id="text-title">
@@ -41,13 +41,13 @@
             <textarea id="text-content"></textarea>
         </div>
         <div>
-            <button id="btn-create">创建</button>
+            <button id="btn-create">Create!</button>
         </div>
     </div>
 
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
     <script>
-        // 发送 post 请求
+        // Send POST request
         function post(url, data = {}) {
             return $.ajax({
                 type: 'post',
@@ -57,17 +57,17 @@
             })
         }
 
-        // 获取 dom 元素
+        // Get dom element
         $textTitle = $('#text-title')
         $textContent = $('#text-content')
         $btnCreate = $('#btn-create')
 
-        // 提交数据
+        // Submit data
         $btnCreate.click(() => {
             const title = $textTitle.val().trim()
             const content = $textContent.val().trim()
             if (title === '' || content === '') {
-                alert('标题或内容不能为空')
+                alert('Neither title nor content can be empty!')
                 return
             }
 
@@ -78,10 +78,10 @@
             }
             post(url, data).then(res => {
                 if (res.errno !== 0) {
-                    alert('操作错误')
+                    alert('Operation Error')
                     return
                 }
-                alert('创建成功')
+                alert('A new blog has successfully created!')
                 location.href = '/admin.html'
             })
         })

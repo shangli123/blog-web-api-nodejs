@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>博客详情页</title>
+    <title>Blog Contents</title>
     <style type="text/css">
         body {
             margin: 0 20px;
@@ -45,17 +45,17 @@
     <script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
     <script src="https://cdn.bootcss.com/moment.js/2.23.0/locale/zh-cn.js"></script>
     <script>
-        // 发送 get 请求
+        // Send GET request
         function get(url) {
             return $.get(url)
         }
 
-        // 显示格式化的时间
+        // Show formatted times
         function getFormatDate(dt) {
             return moment(dt).format('LL')
         }
 
-        // 获取 url 参数
+        // Get url parameters
         function getUrlParams() {
             let paramStr = location.href.split('?')[1] || ''
             paramStr = paramStr.split('#')[0]
@@ -69,21 +69,21 @@
             return result
         }
 
-        // 获取 dom 元素
+        // Get dom elements
         const $title = $('#title')
         const $infoContainer = $('#info-container')
         const $content = $('#content')
 
-        // 获取数据
+        // Get data
         const urlParams = getUrlParams()
         const url = '/api/blog/detail?id=' + urlParams.id
         get(url).then(res => {
             if (res.errno !== 0) {
-                alert('数据错误')
+                alert('Data Error!')
                 return
             }
 
-            // 显示数据
+            // Show data
             const data = res.data || []
             console.log(data)
             $title.text(data.title)

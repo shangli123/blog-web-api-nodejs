@@ -42,17 +42,17 @@
     <script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
     <script src="https://cdn.bootcss.com/moment.js/2.23.0/locale/zh-cn.js"></script>
     <script>
-        // 发送 get 请求
+        // Send GET Request
         function get(url) {
             return $.get(url)
         }
 
-        // 显示格式化的时间
+        // Show formatted times 
         function getFormatDate(dt) {
             return moment(dt).format('LL')
         }
 
-        // 获取 url 参数
+        // Get url parameters
         function getUrlParams() {
             let paramStr = location.href.split('?')[1] || ''
             paramStr = paramStr.split('#')[0]
@@ -66,10 +66,10 @@
             return result
         }
 
-        // 获取 dom 元素
+        // Get dom elements
         const $container = $('#blog-container')
 
-        // 拼接接口 url
+        // Concat url
         let url = '/api/blog/list'
         const urlParams = getUrlParams()
         if (urlParams.author) {
@@ -78,15 +78,15 @@
 
         console.log("url:", url);
 
-        // 加载数据
+        // Load data
         get(url).then((res) => {
             console.log("res:", res);
             if (res.errno !== 0) {
-                alert('Something went wrong!')
+                alert('Data Error!')
                 return
             }
 
-            // 遍历博客列表，并显示
+            // Traverse all blogs and print
             const data = res.data || []
             data.forEach(item => {
                 $container.append($(`

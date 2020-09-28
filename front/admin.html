@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>管理中心</title>
+    <title>User Center</title>
     <style type="text/css">
         body {
             margin: 0 20px;
@@ -33,29 +33,29 @@
 </head>
 
 <body>
-    <h1 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">管理中心</h1>
+    <h1 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">User Center</h1>
     <p>
-        <a href="/new.html">新建博客</a>
+        <a href="/new.html">New Blog</a>
     </p>
     <div style="margin-bottom: 10px;">
         <input id="text-keyword">
-        <button id="btn-search">搜索</button>
+        <button id="btn-search">Search</button>
     </div>
     <table id="table-container">
         <tr>
-            <th>博客标题</th>
-            <th colspan="2">操作</th>
+            <th>Titles</th>
+            <th colspan="2">Operations</th>
         </tr>
     </table>
 
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
     <script>
-        // 发送 get 请求
+        // Send GET request
         function get(url) {
             return $.get(url)
         }
 
-        // 发送 post 请求
+        // Send POST request
         function post(url, data = {}) {
             return $.ajax({
                 type: 'post',
@@ -65,7 +65,7 @@
             })
         }
 
-        // 获取 url 参数
+        // Get url parameters
         function getUrlParams() {
             let paramStr = location.href.split('?')[1] || ''
             paramStr = paramStr.split('#')[0]
@@ -79,26 +79,26 @@
             return result
         }
 
-        // 获取 dom 元素
+        // Get dom elements
         const $textKeyword = $('#text-keyword')
         const $btnSearch = $('#btn-search')
         const $tableContainer = $('#table-container')
 
-        // 拼接接口 url
-        let url = '/api/blog/list?isadmin=1'  // 增加一个 isadmin=1 参数，使用登录者的用户名，后端也需要修改 ！！！
+        // Concat url
+        let url = '/api/blog/list?isadmin=1' 
         const urlParams = getUrlParams()
         if (urlParams.keyword) {
             url += '&keyword=' + urlParams.keyword
         }
 
-        // 加载数据
+        // Load data
         get(url).then(res => {
             if (res.errno !== 0) {
-                alert('数据错误')
+                alert('Data Error!')
                 return
             }
 
-            // 显示数据
+            // Show data
             const data = res.data || []
             data.forEach(item => {
                 $tableContainer.append($(`
@@ -117,25 +117,25 @@
             })
         })
 
-        // 搜索
+        // Search
         $btnSearch.click(() => {
             const keyword = $textKeyword.val()
             location.href = '/admin.html?keyword=' + keyword
         })
 
-        // 删除
+        // Delete
         $tableContainer.click(e => {
             const $target = $(e.target)
             if ($target.hasClass('item-del') === false) {
                 return
             }
 
-            if (confirm('确定删除？')) {
+            if (confirm('Do you really want to delete this blog?')) {
                 const url = '/api/blog/delete?id=' + $target.attr('data-id')
                 console.log('123')
                 post(url).then(res => {
                     if (res.errno !== 0) {
-                        alert('操作错误')
+                        alert('Operation Error!')
                         return
                     }
                     location.href = location.href
