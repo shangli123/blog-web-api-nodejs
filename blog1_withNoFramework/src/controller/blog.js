@@ -1,4 +1,4 @@
-const {exec} = require('../db/mysql')
+const {exec, escape} = require('../db/mysql')
 
 const getList = (author, keyword) => {
     let sql = 'SELECT blogs.id, title, username FROM blogs JOIN users ON blogs.authorID = users.id WHERE 1=1 '
@@ -21,13 +21,13 @@ const getDetail = (id) => {
 }
 
 const newBlog = (blogData = {}) => {
-    const title = blogData.title
-    const content = blogData.content
-    const author = blogData.author
-    const sql_getID = `SELECT id FROM users WHERE username = '${author}';`
+    const title = escape(blogData.title)
+    const content = escape(blogData.content)
+    const author = escape(blogData.author)
+    const sql_getID = `SELECT id FROM users WHERE username = ${author};`
     return exec(sql_getID).then(rows => {
         const authorID = rows[0].id
-        const sql = `INSERT INTO blogs (title, content, authorID) VALUES ('${title}', '${content}', '${authorID}');`
+        const sql = `INSERT INTO blogs (title, content, authorID) VALUES (${title}, ${content}, ${authorID});`
         return exec(sql).then(insertData => {
             //console.log('insertData is ', insertData)
             return {
@@ -38,11 +38,11 @@ const newBlog = (blogData = {}) => {
 }
 
 const updateBlog = (id, blogData = {}) => {
-    const title = blogData.title
-    const content = blogData.content
+    const title = escape(blogData.title)
+    const content = escape(blogData.content)
 
     const sql = `
-        UPDATE blogs set title='${title}', content='${content}' WHERE id='${id}';
+        UPDATE blogs set title=${title}, content=${content} WHERE id=${id};
     `
     return exec(sql).then(updateData => {
         console.log('Updated data is: ', updateData)
