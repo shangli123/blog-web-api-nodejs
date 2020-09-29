@@ -1,4 +1,5 @@
 const {exec, escape} = require('../db/mysql')
+const xss = require('xss')
 
 const getList = (author, keyword) => {
     let sql = 'SELECT blogs.id, title, username FROM blogs JOIN users ON blogs.authorID = users.id WHERE 1=1 '
@@ -21,9 +22,9 @@ const getDetail = (id) => {
 }
 
 const newBlog = (blogData = {}) => {
-    const title = escape(blogData.title)
-    const content = escape(blogData.content)
-    const author = escape(blogData.author)
+    const title = xss(escape(blogData.title))
+    const content = xss(escape(blogData.content))
+    const author = xss(escape(blogData.author))
     const sql_getID = `SELECT id FROM users WHERE username = ${author};`
     return exec(sql_getID).then(rows => {
         const authorID = rows[0].id
@@ -38,8 +39,8 @@ const newBlog = (blogData = {}) => {
 }
 
 const updateBlog = (id, blogData = {}) => {
-    const title = escape(blogData.title)
-    const content = escape(blogData.content)
+    const title = xss(escape(blogData.title))
+    const content = xss(escape(blogData.content))
 
     const sql = `
         UPDATE blogs set title=${title}, content=${content} WHERE id=${id};
