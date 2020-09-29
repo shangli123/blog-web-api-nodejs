@@ -48,7 +48,7 @@ const serverHandle = (req, res) => {
 
     req.query = querystring.parse(url.split('?')[1])
 
-    // Cookie
+    // Get Cookie
     req.cookie = {}
     const cookieStr = req.headers.cookie || ''
     cookieStr.split(';').forEach(element => {
